@@ -31,13 +31,14 @@ spec:
             fsGroup: {{ .Values.securityContext.fsGroup }}
             runAsUser: {{ .Values.securityContext.runAsUser }}
           {{- end }}
+          restartPolicy: "Never"
           containers:
           - name: mysql-backup
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
             env:
               - name: RUN_ONCE
-                value: true
+                value: "true"
               - name: DB_SERVER
                 value: {{ .Values.mysql.host | quote }}
               - name: DB_USER
@@ -46,10 +47,10 @@ spec:
                 value: {{ .Values.mysql.password | quote }}
               {{- if .Values.mysql.dbNames }}
               - name: DB_NAMES
-                value: {{ .Values.mysql.dbNames }}
+                value: {{ .Values.mysql.dbNames | quote }}
               {{- end}}
               - name: DB_DUMP_BY_SCHEMA
-                value: {{ .Values.dumpBySchema }}
+                value: {{ .Values.dumpBySchema | quote }}
               - name: DB_DUMP_TARGET
                 value: "s3://{{ .Values.s3.destination }}"
               - name: AWS_ACCESS_KEY_ID
