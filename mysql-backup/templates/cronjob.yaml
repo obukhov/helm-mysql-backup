@@ -1,0 +1,68 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "mysql-backup.fullname" . }}
+  labels:
+{{ include "mysql-backup.labels" . | indent 4 }}
+spec:
+  schedule: "{{ .Values.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      labels:
+        app: {{ template "mysql-backup.name" . }}
+        chart: {{ template "mysql-backup.chart" . }}
+        cronjob-name: {{ template "mysql-backup.fullname" . }}
+        release: "{{ .Release.Name }}"
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app: {{ template "mysql-backup.name" . }}
+            chart: {{ template "mysql-backup.chart" . }}
+            cronjob-name: {{ template "mysql-backup.fullname" . }}
+            release: "{{ .Release.Name }}"    
+        spec:
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            fsGroup: {{ .Values.securityContext.fsGroup }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+          {{- end }}
+          containers:
+          - name: mysql-backup
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+            env:
+              - name: RUN_ONCE
+                value: true
+              - name: DB_SERVER
+                value: {{ .Values.mysql.host | quote }}
+              - name: DB_USER
+                value: {{ .Values.mysql.username | quote }}
+              - name: DB_PASS
+                value: {{ .Values.mysql.password | quote }}
+              {{- if .Values.mysql.dbNames }}
+              - name: DB_NAMES
+                value: {{ .Values.mysql.dbNames }}
+              {{- end}}
+              - name: DB_DUMP_BY_SCHEMA
+                value: {{ .Values.dumpBySchema }}
+              - name: DB_DUMP_TARGET
+                value: "s3://{{ .Values.s3.destination }}"
+              - name: AWS_ACCESS_KEY_ID
+                value: {{ .Values.s3.accessKeyId | quote }}
+              - name: AWS_SECRET_ACCESS_KEY
+                value: {{ .Values.s3.accessKeySecret | quote }}
+            {{- if .Values.s3.endpointUrl }}
+              - name: AWS_ENDPOINT_URL
+                value: {{ .Values.s3.endpointUrl | quote }}
+            {{- end }}
+            {{- if .Values.s3.defaultRegion }}
+              - name: AWS_DEFAULT_REGION
+                value: {{ .Values.s3.defaultRegion | quote }}                
+            {{- end }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}

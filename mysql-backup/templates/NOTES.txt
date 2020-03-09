@@ -1,0 +1,26 @@
+Running mysql-backup on crontab schedule "{{ .Values.schedule }}"
+
+For cronjob status run:
+
+$ kubectl get cronjob {{ template "mysql-backup.fullname" . }} -o wide
+
+$ kubectl get jobs --selector=cronjob-name={{ template "mysql-backup.fullname" . }}
+
+To see the logs from the most recent backup job run:
+
+$ kubectl logs $(kubectl get pods --selector \
+  job-name=$(kubectl get jobs --selector=cronjob-name={{ template "mysql-backup.fullname" . }} \
+  --output=jsonpath='{.items[-1:].metadata.name}') \
+  --output=jsonpath={.items..metadata.name})
+
+To run cronjob now run:
+
+$ kubectl create job {{ template "mysql-backup.fullname" . }} --from=cronjob/{{ template "mysql-backup.fullname" . }}
+
+mysql-backup contents can be found in "{{ .Values.s3.destination }}"
+  {{- if .Values.s3.endpointUrl }}
+  Endpoint: {{ .Values.s3.endpointUrl }}                
+  {{- end }}
+  {{- if .Values.s3.defaultRegion }}
+  Region: {{ .Values.s3.defaultRegion }}                
+  {{- end }}

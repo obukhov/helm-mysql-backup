@@ -1,53 +1,43 @@
 image:
   repository: databack/mysql-backup
-  tag: "latest"
+  tag: latest
   pullPolicy: IfNotPresent
 
 mysql:
   host: ""
   username: root
-  # overriden by existingDbSecret / existingDbSecretKey if set
-  password:
+  password: ""
   port: 3306
-  # db for single db backup
-  db: dbname
-  # Get password from existing secret
-  # existingSecret:
-  # existingSecretKey:
+  # db names seprated by comma (default if empty)
+  dbNames: dbnames
 
-
-## set to `now` to get a one time job, or a cronjob schedule like `0 0 * * *`
-## to get a cronjob.
 schedule: "0 3 * * *"
-
-# enable some debug options
-debug: false
+# Dump each database to a separate file
+dumpBySchema: true
 
 # cronjob history
 successfulJobsHistoryLimit: 5
 failedJobsHistoryLimit: 5
 
 # upload backup
-upload:
-  s3:
-    enabled: false
-    accessKeyId: ""
-    accessKeySecret: ""
-    userDomain: default
-    endpointUrl: ""
-    destination: backup/mysql
+s3:
+  accessKeyId: ""
+  accessKeySecret: ""
+  defaultRegion: ""
+  endpointUrl: ""
+  destination: "bucket/folder"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits:
-   cpu: 100m
-   memory: 128Mi
-  requests:
-   cpu: 100m
-   memory: 128Mi
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
 
 nodeSelector: {}
 
