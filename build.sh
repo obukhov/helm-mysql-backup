@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir packages
 helm package --destination packages mysql-backup
 cr upload \
     --owner obukhov \

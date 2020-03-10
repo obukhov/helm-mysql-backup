@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  mysql-backup:
+  - apiVersion: v2
+    appVersion: a7eea23f89db18e29318d8e3fc824f1c9cc54aa5
+    created: "2020-03-11T00:25:47.267708+01:00"
+    description: Registers cronjob for mysql database backup and uplaods
+    digest: d9784e8db90d1791b35ab3c09ead688bc92b61e4ccd73b69cc69654f78215f79
+    name: mysql-backup
+    type: application
+    urls:
+    - https://github.com/obukhov/helm-mysql-backup/releases/download/mysql-backup-0.1.1/mysql-backup-0.1.1.tgz
+    version: 0.1.1
+generated: "2020-03-11T00:25:46.934468+01:00"
