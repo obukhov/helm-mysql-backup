@@ -1,6 +1,6 @@
 image:
   repository: databack/mysql-backup
-  tag: latest
+  tag: a7eea23f89db18e29318d8e3fc824f1c9cc54aa5
   pullPolicy: IfNotPresent
 
 mysql:
