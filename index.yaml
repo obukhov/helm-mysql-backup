@@ -11,4 +11,14 @@ entries:
     urls:
     - https://github.com/obukhov/helm-mysql-backup/releases/download/mysql-backup-0.1.1/mysql-backup-0.1.1.tgz
     version: 0.1.1
+  - apiVersion: v1
+    appVersion: a7eea23f89db18e29318d8e3fc824f1c9cc54aa5
+    created: "2020-03-11T00:35:46.566631+01:00"
+    description: Registers cronjob for mysql database backup and uplaods
+    digest: 0afdf7afe989998ce9354f98eb9c4fed99699e10504f55f35a9b050353f0d6bc
+    name: mysql-backup
+    type: application
+    urls:
+    - https://github.com/obukhov/helm-mysql-backup/releases/download/mysql-backup-0.0.1/mysql-backup-0.0.1.tgz
+    version: 0.0.1
 generated: "2020-03-11T00:25:46.934468+01:00"
