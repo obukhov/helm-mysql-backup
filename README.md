@@ -46,7 +46,7 @@ Miniamal values.yaml file:
     destination: "bucket/path/to/backup"
 ```
 
-# Custom s3 compatible object stores
+## Custom s3 compatible object stores
 This chart also supports custom s3 endpoint. This makes it possible to use with digitalocean spaces, i.e:
 
 ```
